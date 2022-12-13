@@ -1,7 +1,7 @@
 import pandas as pd
 import streamlit as st
 import plotly_express as px
-df = pd.read_csv('/Users/licha/Downloads/Project4/vehicles_us.csv')
+df = pd.read_csv('/Project4/vehicles_us.csv')
 df['manufacturer'] = df['model'].apply(lambda x: x.split()[0])
 display(df.duplicated().sum())
 # create a text header above the dataframe
@@ -50,4 +50,28 @@ fig = px.histogram(df_filtered,
                       histnorm=histnorm,
                       barmode='overlay')
 # display the figure with streamlit
+st.write(fig)
+
+#Header for the graph
+st.header('Odometer and Price')
+# Odometer vs price under different  condition
+fig = px.scatter(df, x='odometer', y='price', color='condition')
+#display with streamlit
+st.write(fig)
+
+#Data prep
+df_year_price = df.groupby(['model_year', 'condition', 'is_4wd']).mean('price')
+df_year_price = df_year_price.reset_index()
+#Header for the graph
+st.header('Model Year and Price')
+#checkbox for 4wd or not
+test = st.checkbox('4wd', value=True)
+if test:
+    test_condition = 1
+else:
+    test_condition = 0
+# Odometer vs price under different  condition
+df_year_price2 = df_year_price.loc[df_year_price['is_4wd'] == test_condition]
+fig = px.histogram(df_year_price, x='model_year', y='price', color='condition')
+#display with streamlit
 st.write(fig)
