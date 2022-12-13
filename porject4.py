@@ -3,7 +3,8 @@ import streamlit as st
 import plotly_express as px
 df = pd.read_csv('/Project4/vehicles_us.csv')
 df['manufacturer'] = df['model'].apply(lambda x: x.split()[0])
-display(df.duplicated().sum())
+#For is_4wd, 1 means is and NaN means not, change Nan to 0
+df['is_4wd'] = df['is_4wd'].fillna(0)
 # create a text header above the dataframe
 st.header('Data viewer') 
 # display the dataframe with streamlit
@@ -72,6 +73,6 @@ else:
     test_condition = 0
 # Odometer vs price under different  condition
 df_year_price2 = df_year_price.loc[df_year_price['is_4wd'] == test_condition]
-fig = px.histogram(df_year_price, x='model_year', y='price', color='condition')
+fig = px.histogram(df_year_price2, x='model_year', y='price', color='condition')
 #display with streamlit
 st.write(fig)
