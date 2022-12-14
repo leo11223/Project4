@@ -1,7 +1,7 @@
 import pandas as pd
 import streamlit as st
 import plotly_express as px
-df = pd.read_csv('/vehicles_us.csv')
+df = pd.read_csv('vehicles_us.csv')
 df['manufacturer'] = df['model'].apply(lambda x: x.split()[0])
 #For is_4wd, 1 means is and NaN means not, change Nan to 0
 df['is_4wd'] = df['is_4wd'].fillna(0)
