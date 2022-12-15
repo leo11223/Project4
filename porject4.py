@@ -1,10 +1,25 @@
 import pandas as pd
 import streamlit as st
 import plotly_express as px
+import statistics as stat
 df = pd.read_csv('vehicles_us.csv')
 df['manufacturer'] = df['model'].apply(lambda x: x.split()[0])
 #For is_4wd, 1 means is and NaN means not, change Nan to 0
 df['is_4wd'] = df['is_4wd'].fillna(0)
+#fill NAN in model year with median value of year since year need to be integer
+model_year_mean = stat.mean(df['model_year'].dropna())
+df['model_year'] = df['model_year'].fillna(model_year_mean)
+df['model_year'] = df['model_year'].astype('int')
+#fill missing value in cylinders with median value of cylinders for cylinders have to be integers. Then, fix the data type to integer
+median_cylinders = stat.median(df['cylinders'].dropna())
+df['cylinders'] = df['cylinders'].fillna(median_cylinders)
+df['cylinders'] = df['cylinders'].astype('int')
+#fill missing value in color with no_info
+df['paint_color'] = df['paint_color'].fillna('no_info')
+#For missing value of odometer, fill with mean value
+mean_odometer = stat.mean(df['odometer'].dropna())
+df['odometer'] = df['odometer'].fillna(mean_odometer)
+
 # create a text header above the dataframe
 st.header('Data viewer') 
 # display the dataframe with streamlit
