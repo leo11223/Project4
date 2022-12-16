@@ -88,11 +88,10 @@ st.write(fig)
 #Data prep for vehicle type and Price. 
 df_type_price = df.groupby(['transmission', 'condition', 'is_4wd']).mean('price')
 df_type_price = df_type_price.reset_index()
-display(df_type_price)
 
 #Header for the graph
-st.header('Vehicle type and Price')
-# Odometer vs price under different  condition
+st.header('Transmission type and Price')
+# Transmission type vs price under different  condition
 fig = px.histogram(df_type_price, x='transmission', y='price', color='condition', histfunc='avg')
 #display with streamlit
 st.write(fig)
@@ -101,11 +100,10 @@ st.write(fig)
 #Data prep for vehicle type and Price. 
 df_type_price = df.groupby(['cylinders', 'condition', 'is_4wd']).mean('price')
 df_type_price = df_type_price.reset_index()
-display(df_type_price)
 
 #Header for the graph
-st.header('Vehicle type and Price')
-# Odometer vs price under different  condition
+st.header('cylinders and Price')
+# Cylinders vs price under different  condition
 fig = px.histogram(df_type_price, x='cylinders', y='price', color='condition', histfunc='avg')
 #display with streamlit
 st.write(fig)
