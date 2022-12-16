@@ -24,14 +24,6 @@ df['odometer'] = df['odometer'].fillna(mean_odometer)
 st.header('Data viewer') 
 # display the dataframe with streamlit
 st.dataframe(df)
-st.header('Vehicle types by manufacturer')
-# create a plotly histogram figure
-fig = px.histogram(df, x='manufacturer', color='type')
-# display the figure with streamlit
-st.write(fig)
-st.header('Histogram of `condition` vs `model_year`')
-fig = px.histogram(df, x='model_year', color='condition')
-st.write(fig)
 st.header('Compare price distribution between manufacturers')
 # get a list of car manufacturers
 manufac_list = sorted(df['manufacturer'].unique())
@@ -89,5 +81,31 @@ else:
 # Odometer vs price under different  condition
 df_year_price2 = df_year_price.loc[df_year_price['is_4wd'] == test_condition]
 fig = px.histogram(df_year_price2, x='model_year', y='price', color='condition')
+#display with streamlit
+st.write(fig)
+
+#Transmission vs price
+#Data prep for vehicle type and Price. 
+df_type_price = df.groupby(['transmission', 'condition', 'is_4wd']).mean('price')
+df_type_price = df_type_price.reset_index()
+display(df_type_price)
+
+#Header for the graph
+st.header('Vehicle type and Price')
+# Odometer vs price under different  condition
+fig = px.histogram(df_type_price, x='transmission', y='price', color='condition', histfunc='avg')
+#display with streamlit
+st.write(fig)
+
+#Cylinder vs price
+#Data prep for vehicle type and Price. 
+df_type_price = df.groupby(['cylinders', 'condition', 'is_4wd']).mean('price')
+df_type_price = df_type_price.reset_index()
+display(df_type_price)
+
+#Header for the graph
+st.header('Vehicle type and Price')
+# Odometer vs price under different  condition
+fig = px.histogram(df_type_price, x='cylinders', y='price', color='condition', histfunc='avg')
 #display with streamlit
 st.write(fig)
