@@ -4,11 +4,12 @@ import plotly_express as px
 import statistics as stat
 df = pd.read_csv('vehicles_us.csv')
 df['manufacturer'] = df['model'].apply(lambda x: x.split()[0])
-#For is_4wd, 1 means is and NaN means not, change Nan to 0
+#For is_4wd, 1 means is and NaN means not, change Nan to 0. Fix datatype to int as well.
 df['is_4wd'] = df['is_4wd'].fillna(0)
+df['is_4wd'] = df['is_4wd'].astype('int')
 #fill NAN in model year with median value of year since year need to be integer
-model_year_mean = stat.mean(df['model_year'].dropna())
-df['model_year'] = df['model_year'].fillna(model_year_mean)
+model_year_median = stat.median(df['model_year'].dropna())
+df['model_year'] = df['model_year'].fillna(model_year_median)
 df['model_year'] = df['model_year'].astype('int')
 #fill missing value in cylinders with median value of cylinders for cylinders have to be integers. Then, fix the data type to integer
 median_cylinders = stat.median(df['cylinders'].dropna())
