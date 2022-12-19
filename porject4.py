@@ -7,19 +7,19 @@ df['manufacturer'] = df['model'].apply(lambda x: x.split()[0])
 #For is_4wd, 1 means is and NaN means not, change Nan to 0. Fix datatype to int as well.
 df['is_4wd'] = df['is_4wd'].fillna(0)
 df['is_4wd'] = df['is_4wd'].astype('int')
-#fill NAN in model year with median value of year since year need to be integer
-model_year_median = stat.median(df['model_year'].dropna())
-df['model_year'] = df['model_year'].fillna(model_year_median)
+#Fixing missing value for cylinders, odometer and paint color. 
+#fill NAN in model year with median value of year by model since year need to be integer
+df['model_year'] = df['model_year'].fillna(df.groupby('model')['model_year'].transform('median'))
 df['model_year'] = df['model_year'].astype('int')
-#fill missing value in cylinders with median value of cylinders for cylinders have to be integers. Then, fix the data type to integer
-median_cylinders = stat.median(df['cylinders'].dropna())
-df['cylinders'] = df['cylinders'].fillna(median_cylinders)
+#fill missing value in cylinders with median value of cylinders by model for cylinders have to be integers. Then, fix the data type to integer
+df['cylinders'] = df['cylinders'].fillna(df.groupby('model')['cylinders'].transform('median'))
 df['cylinders'] = df['cylinders'].astype('int')
 #fill missing value in color with no_info
 df['paint_color'] = df['paint_color'].fillna('no_info')
-#For missing value of odometer, fill with mean value
-mean_odometer = stat.mean(df['odometer'].dropna())
-df['odometer'] = df['odometer'].fillna(mean_odometer)
+#For missing value of odometer, fill with mean odometer value by year
+df['odometer'] = df['odometer'].fillna(df.groupby('model_year')['odometer'].transform('mean'))
+avg = stat.mean(df.loc[df['model'] == 'ford f-150']['odometer'].dropna())
+df['odometer'] = df['odometer'].fillna(avg)
 
 # create a text header above the dataframe
 st.header('Data viewer') 
